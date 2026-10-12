@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#102a43">
+<title>MIVCHAN Student Portal</title>
+<style>
+:root{--navy:#102a43;--blue:#1769aa;--light:#f3f7fb;--ink:#172b4d;--muted:#61758a;--line:#dbe5ef;--white:#fff;--gold:#f4c95d}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--light);color:var(--ink)}
+header{background:linear-gradient(130deg,#102a43,#1769aa);color:white;padding:25px 16px 30px}
+.wrap{max-width:980px;margin:auto}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:14px;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-weight:900;font-size:19px}
+h1{font-size:clamp(24px,5vw,36px);margin:0}header p{margin:7px 0 0;color:#d9e9f7}.main{padding:18px 14px 40px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tab,button{border:0;border-radius:10px;padding:11px 14px;font-weight:700;cursor:pointer}.tab{background:#e0eaf4;color:var(--navy)}.tab.active,button.primary{background:var(--blue);color:white}button.secondary{background:#e7eef6;color:var(--navy)}button.danger{background:#fde8e7;color:#9b2226}.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:15px;box-shadow:0 3px 12px #17324d0a}.panel h2{font-size:20px;margin:0 0 14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:12px;border:1px solid #c8d5e2;border-radius:9px;font:inherit;background:white}.field textarea{min-height:80px}.courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px}.course{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:9px;padding:10px;font-size:14px}.course input{accent-color:var(--blue)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.notice{padding:12px;border-radius:10px;background:#fff7dc;color:#735b13;font-size:13px;margin-bottom:14px}.empty{padding:24px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}.schedule-item{display:flex;gap:13px;padding:14px 0;border-bottom:1px solid var(--line)}.schedule-item:last-child{border-bottom:0}.datebox{background:#e4f0fb;border-radius:10px;padding:9px;min-width:65px;text-align:center;color:var(--blue);font-weight:800;font-size:12px}.datebox strong{display:block;font-size:22px}.detail{flex:1}.detail b{display:block}.detail small{display:block;color:var(--muted);margin-top:4px}.pill{font-size:11px;border-radius:30px;background:#e8f6ec;color:#22683a;padding:4px 8px;display:inline-block;margin-top:7px}.small{font-size:12px;color:var(--muted)}footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}.hidden{display:none!important}.row-between{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.entry{border:1px solid var(--line);padding:12px;border-radius:10px;margin-top:9px}.entry button{padding:7px 10px}@media print{header,.tabs,.no-print,footer{display:none!important}body{background:white}.main{padding:0}.panel{border:0;box-shadow:none;padding:0}.panel:not(#timetablePanel){display:none!important}#timetablePanel{display:block!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="brand"><div class="logo">M</div><div><h1>MIVCHAN Student Portal</h1><p>Your courses. Your schedule. One place.</p></div></div></div></header>
+<main class="main wrap">
+  <div class="notice"><b>Prototype mode:</b> This first version saves changes only in this browser on this device. The sample schedule is fictional. Do not use it as an official timetable or store sensitive student data here.</div>
+  <div class="tabs no-print">
+    <button class="tab active" data-tab="student">Student timetable</button>
+    <button class="tab" data-tab="admin">Manage schedule (demo)</button>
+  </div>
+  <section id="studentView">
+    <div class="panel">
+      <h2>Find your timetable</h2>
+      <div class="grid">
+        <div class="field"><label for="studentName">Student name</label><input id="studentName" placeholder="Enter your full name" autocomplete="name"></div>
+        <div class="field"><label for="matric">Matriculation number (optional)</label><input id="matric" placeholder="Enter matric number"></div>
+      </div>
+      <p><b>Select your registered courses</b></p>
+      <div id="courses" class="courses"></div>
+      <div class="actions no-print"><button class="primary" id="showBtn">Generate my timetable</button><button class="secondary" id="clearBtn">Clear selection</button></div>
+    </div>
+    <div class="panel" id="timetablePanel">
+      <div class="row-between"><h2 id="resultTitle">Your examination timetable</h2><button class="secondary no-print" onclick="window.print()">Print / Save PDF</button></div>
+      <p id="resultSub" class="small">Choose your courses and generate a timetable.</p>
+      <div id="timetable"><div class="empty">Your matching timetable will appear here.</div></div>
+    </div>
+  </section>
+  <section id="adminView" class="hidden">
+    <div class="panel">
+      <h2>Add an official timetable entry</h2>
+      <p class="small">Demo only: entries are stored in this browser. They will not appear on other students' phones. Connect a secure backend before real public use.</p>
+      <div class="grid">
+        <div class="field"><label for="aCode">Course code</label><input id="aCode" placeholder="e.g. CIT383"></div>
+        <div class="field"><label for="aTitle">Course title (optional)</label><input id="aTitle" placeholder="e.g. Introduction to Computing"></div>
+        <div class="field"><label for="aDate">Examination date</label><input id="aDate" type="date"></div>
+        <div class="field"><label for="aTime">Time</label><input id="aTime" placeholder="e.g. 9:00 AM – 11:00 AM"></div>
+        <div class="field"><label for="aVenue">Venue / mode</label><input id="aVenue" placeholder="e.g. Hall A / CBT Centre"></div>
+        <div class="field"><label for="aNote">Notes (optional)</label><input id="aNote" placeholder="e.g. Bring student ID"></div>
+      </div>
+      <div class="actions"><button class="primary" id="addEntry">Save entry on this device</button><button class="secondary" id="exportBtn">Export schedule JSON</button><label class="secondary" style="display:inline-flex;align-items:center;cursor:pointer">Import JSON<input id="importFile" type="file" accept=".json,application/json" hidden></label></div>
+      <p id="adminMsg" class="small" aria-live="polite"></p>
+    </div>
+    <div class="panel"><div class="row-between"><h2>Saved entries</h2><button class="danger" id="resetDemo">Reset to sample data</button></div><div id="entriesList"></div></div>
+  </section>
+</main>
+<footer>MIVCHAN Student Portal · Prototype for learning and testing</footer>
+<script>
+const initial = [
+ {code:"CIT383",title:"Sample course",date:"2026-11-02",time:"9:00 AM – 11:00 AM",venue:"To be confirmed",note:"Fictional demonstration entry"},
+ {code:"CIT335",title:"Sample course",date:"2026-11-04",time:"1:00 PM – 3:00 PM",venue:"To be confirmed",note:"Fictional demonstration entry"},
+ {code:"CIT316",title:"Sample course",date:"2026-11-06",time:"9:00 AM – 11:00 AM",venue:"To be confirmed",note:"Fictional demonstration entry"}
+];
+const defaultCourses=["CIT383","CIT335","CIT316","CIT310","CIT308","CIT304","CIT309","MTH102"];
+const storeKey="mivchan_demo_schedule_v1";
+let schedule;
+try{schedule=JSON.parse(localStorage.getItem(storeKey)||"null")||initial}catch(e){schedule=initial}
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(storeKey,JSON.stringify(schedule))}
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function courseList(){
+ const all=[...new Set([...defaultCourses,...schedule.map(x=>String(x.code||"").toUpperCase()).filter(Boolean)])].sort();
+ $("courses").innerHTML=all.map(c=>`<label class="course"><input type="checkbox" value="${escapeHtml(c)}"> ${escapeHtml(c)}</label>`).join("");
+}
+function fmtDate(d){if(!d)return "Date TBC";let x=new Date(d+"T12:00:00");return x.toLocaleDateString(undefined,{month:"short",day:"numeric"})}
+function renderTimetable(){
+ const selected=[...$("courses").querySelectorAll("input:checked")].map(x=>x.value);
+ const name=$("studentName").value.trim();
+ $("resultTitle").textContent=name?`Timetable for ${name}`:"Your examination timetable";
+ $("resultSub").textContent=selected.length?`Selected courses: ${selected.join(", ")}`:"Select at least one course above.";
+ const matches=schedule.filter(x=>selected.includes(String(x.code||"").toUpperCase())).sort((a,b)=>(a.date||"9999").localeCompare(b.date||"9999"));
+ if(!selected.length){$("timetable").innerHTML='<div class="empty">Choose your courses and generate a timetable.</div>';return}
+ if(!matches.length){$("timetable").innerHTML='<div class="empty">No schedule entries match your selected courses yet. Check back after the administrator publishes the official timetable.</div>';return}
+ $("timetable").innerHTML=matches.map(x=>`<div class="schedule-item"><div class="datebox">${escapeHtml(fmtDate(x.date))}<strong>${x.date?escapeHtml(new Date(x.date+"T12:00:00").getDate()):"—"}</strong></div><div class="detail"><b>${escapeHtml(x.code)}${x.title?" — "+escapeHtml(x.title):""}</b><small>${escapeHtml(x.time||"Time to be confirmed")}</small><small>${escapeHtml(x.venue||"Venue to be confirmed")}</small>${x.note?`<span class="pill">${escapeHtml(x.note)}</span>`:""}</div></div>`).join("");
+}
+function renderEntries(){
+ $("entriesList").innerHTML=schedule.length?schedule.map((x,i)=>`<div class="entry"><div class="row-between"><b>${escapeHtml(x.code)} — ${escapeHtml(x.date||"Date TBC")}</b><button class="danger" data-delete="${i}">Delete</button></div><div class="small">${escapeHtml(x.title||"")}${x.time?" · "+escapeHtml(x.time):""}${x.venue?" · "+escapeHtml(x.venue):""}</div></div>`).join(""):'<div class="empty">No entries yet.</div>';
+ $("entriesList").querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>{schedule.splice(Number(b.dataset.delete),1);save();refresh()});
+}
+function refresh(){courseList();renderEntries();renderTimetable()}
+document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-tab]").forEach(t=>t.classList.toggle("active",t===b));$("studentView").classList.toggle("hidden",b.dataset.tab!=="student");$("adminView").classList.toggle("hidden",b.dataset.tab!=="admin")}));
+$("showBtn").onclick=renderTimetable;
+$("clearBtn").onclick=()=>{$("courses").querySelectorAll("input").forEach(x=>x.checked=false);renderTimetable()};
+$("addEntry").onclick=()=>{
+ const code=$("aCode").value.trim().toUpperCase(),date=$("aDate").value;
+ if(!code){$("adminMsg").textContent="Please enter a course code.";return}
+ if(!date){$("adminMsg").textContent="Please select the examination date.";return}
+ schedule.push({code,title:$("aTitle").value.trim(),date,time:$("aTime").value.trim(),venue:$("aVenue").value.trim(),note:$("aNote").value.trim()});
+ save();refresh();$("adminMsg").textContent="Saved in this browser only. Not published to other users.";
+ ["aCode","aTitle","aDate","aTime","aVenue","aNote"].forEach(id=>$(id).value="");
+};
+$("exportBtn").onclick=()=>{const blob=new Blob([JSON.stringify(schedule,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="mivchan-schedule.json";a.click();URL.revokeObjectURL(a.href)};
+$("importFile").onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const v=JSON.parse(await f.text());if(!Array.isArray(v)||v.some(x=>!x.code))throw Error("Invalid schedule format");schedule=v;save();refresh();$("adminMsg").textContent="Schedule imported into this browser only."}catch(err){$("adminMsg").textContent="Could not import. Choose a valid JSON file exported by this demo."}e.target.value=""};
+$("resetDemo").onclick=()=>{if(confirm("Replace all saved entries on this device with sample data?")){schedule=[...initial];save();refresh();$("adminMsg").textContent="Sample data restored."}};
+refresh();
+</script>
+</body>
+</html>
